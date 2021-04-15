@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ProjectMonitor.utils;
+using System;
 using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectMonitor
 {
     class HttpUtils
     {
-        public static String postRequest(String url, String data)
+        public static String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+        public static String postRequest(String url, String data, String contentType)
         {
             //定义request并设置request的路径
             WebRequest request = WebRequest.Create(url);
@@ -18,7 +16,7 @@ namespace ProjectMonitor
             //定义请求的方式
             request.Method = "POST";
             //设置request的MIME类型及内容长度
-            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = StringUtils.isEmpty(contentType)? "application/x-www-form-urlencoded":contentType;
             //定义response为前面的request响应
             WebResponse response = null;
             Stream dataStream = null;

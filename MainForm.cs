@@ -4,13 +4,8 @@ using ServerInfo.utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProjectMonitor
@@ -72,9 +67,9 @@ namespace ProjectMonitor
             button.Size = new System.Drawing.Size(90, 90);
             button.TabIndex = 0;
             button.BackColor = Color.AliceBlue;
-            /*Image image = Image.FromFile(@"mstsc.ico");
+            Image image = Image.FromFile(@"resource\icons\computer.ico");
             button.BackgroundImageLayout = ImageLayout.Stretch;
-            button.BackgroundImage = image;*/
+            button.BackgroundImage = image;
 
             button.Text = buttonText;
             button.TextAlign = System.Drawing.ContentAlignment.BottomCenter;

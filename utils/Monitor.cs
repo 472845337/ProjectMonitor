@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ProjectMonitor
@@ -22,7 +20,7 @@ namespace ProjectMonitor
         }
         public void monitorUrl()
         {
-            String result = HttpUtils.postRequest(url, "");
+            String result = HttpUtils.postRequest(url, "", null);
             if ("success".Equals(result))
             {
                 button.BackColor = Color.LimeGreen;
@@ -32,7 +30,7 @@ namespace ProjectMonitor
                 button.BackColor = Color.OrangeRed;
                 if (!"".Equals(warn))
                 {
-                    HttpUtils.postRequest(warn, title + "服务异常！");
+                    HttpUtils.postRequest(warn, title + "服务异常！", HttpUtils.CONTENT_TYPE_APPLICATION_JSON);
                 }
             }
         }
