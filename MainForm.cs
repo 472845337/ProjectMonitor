@@ -2,6 +2,7 @@
 using ServerInfo.config;
 using ServerInfo.utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,17 +21,21 @@ namespace ProjectMonitor
         {
             InitializeComponent();
         }
-
+        // 不能使用窗体中的timer控件，要使用线程timer
+        System.Timers.Timer timer = new System.Timers.Timer();
+        
         private void MainForm_Load(object sender, EventArgs e)
         {
             List<String> sectionList = iniUtils.ReadSections(Config.IniPath);
             for (int i = 0; i < sectionList.Count; i++)
             {
-
                 String section = sectionList[i];
                 // 创建按钮
                 addButton(section);
             }
+            // 给时间控件绑定事件
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_total_Tick);
+            timer.AutoReset = true;
         }
 
         /// <summary>
@@ -49,9 +54,10 @@ namespace ProjectMonitor
             button.Name = section;
             button.Size = new System.Drawing.Size(90, 90);
             button.TabIndex = 0;
-            Image image = Image.FromFile(@"mstsc.ico");
+            button.BackColor = Color.AliceBlue;
+            /*Image image = Image.FromFile(@"mstsc.ico");
             button.BackgroundImageLayout = ImageLayout.Stretch;
-            button.BackgroundImage = image;
+            button.BackgroundImage = image;*/
 
             button.Text = buttonText;
             button.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -127,8 +133,8 @@ namespace ProjectMonitor
         private void BtnRightMonitorClick(Object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            // rdp文件参数
-            
+            // 开始监听状态置为1
+            iniUtils.IniWriteValue(Config.IniPath, (String)menuItem.Tag, "stat", "1");
         }
         /**
          * 右键停止按钮点击事件
@@ -136,7 +142,8 @@ namespace ProjectMonitor
         private void BtnRightStopClick(Object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-
+            // 停止监听
+            iniUtils.IniWriteValue(Config.IniPath, (String)menuItem.Tag, "stat", "0");
         }
 
         /**
@@ -166,8 +173,8 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void Monitor_Button_Click(object sender, EventArgs e)
         {
-            timer_total.Interval = 1000;
-            timer_total.Enabled = true;
+            timer.Interval = 1000;
+            timer.Enabled = true;
         }
 
         /// <summary>
@@ -177,9 +184,86 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void timer_total_Tick(object sender, EventArgs e)
         {
+            List<String> sectionList = iniUtils.ReadSections(Config.IniPath);
+            for (int i = 0; i < sectionList.Count; i++)
+            {
 
+                String section = sectionList[i];
+                String title = iniUtils.IniReadValue(Config.IniPath, section, "title");
+                String url = iniUtils.IniReadValue(Config.IniPath, section, "url");
+                String warn = iniUtils.IniReadValue(Config.IniPath, section, "warn");
+                String stat = iniUtils.IniReadValue(Config.IniPath, section, "stat");
+                // 根据section获取控件
+                object buttonObj = GetControlInstance(flowLayoutPanel, section);
+
+                if ("".Equals(stat) || "1".Equals(stat))
+                {
+                    String result = HttpUtils.postRequest(url, "");
+                    if ("success".Equals(result))
+                    {
+                        ((Button)buttonObj).BackColor = Color.LimeGreen;
+                    }
+                    else
+                    {
+                        ((Button)buttonObj).BackColor = Color.OrangeRed;
+                        if (!"".Equals(warn))
+                        {
+                            HttpUtils.postRequest(warn, title+"服务异常！");
+                        }
+                    }
+                }
+                else
+                {
+                    ((Button)buttonObj).BackColor = Color.LightSteelBlue;
+                }
+            }
         }
 
-        
+        /// <summary>
+        /// 根据指定容器和控件名字，获得控件
+        /// </summary>
+        /// <param name="obj">容器</param>
+        /// <param name="strControlName">控件名字</param>
+        /// <returns>控件</returns>
+        private object GetControlInstance(object obj, string strControlName)
+        {
+            IEnumerator Controls = null;//所有控件
+            Control c = null;//当前控件
+            Object cResult = null;//查找结果
+            if (obj.GetType() == this.GetType())//窗体
+            {
+                Controls = this.Controls.GetEnumerator();
+            }
+            else//控件
+            {
+                Controls = ((Control)obj).Controls.GetEnumerator();
+            }
+            while (Controls.MoveNext())//遍历操作
+            {
+                c = (Control)Controls.Current;//当前控件
+                if (c.HasChildren)//当前控件是个容器
+                {
+                    cResult = GetControlInstance(c, strControlName);//递归查找
+                    if (cResult == null)//当前容器中没有，跳出，继续查找
+                        continue;
+                    else
+                    {
+                        //找到控件，跳出循环
+                        break;
+                    }
+                }
+                else if (c.Name == strControlName)//不是容器，同时找到控件，返回
+                {
+                    cResult = c;
+                    break;
+                }
+            }
+            return cResult;//控件不存在
+        }
+
+        private void Stop_Button_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
+        }
     }
 }

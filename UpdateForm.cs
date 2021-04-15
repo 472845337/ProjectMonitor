@@ -35,11 +35,10 @@ namespace ServerInfo
             
             String title = iniUtils.IniReadValue(Config.IniPath, section, "title");
             String url = iniUtils.IniReadValue( Config.IniPath, section, "url");
-            String port = iniUtils.IniReadValue(Config.IniPath, section, "port");
-            String username = iniUtils.IniReadValue(Config.IniPath, section, "username");
-            String password = iniUtils.IniReadValue(Config.IniPath, section, "password");
+            String warn = iniUtils.IniReadValue(Config.IniPath, section, "warn");
             UpdateForm_Title_TextBox.Text = title;
             UpdateForm_Url_TextBox.Text = url;
+            UpdateForm_Warn_RichTextBox.Text = warn;
         }
 
         private void UpdateForm_Cancel_Button_Click(object sender, EventArgs e)
@@ -51,6 +50,7 @@ namespace ServerInfo
         {
             String title = UpdateForm_Title_TextBox.Text;
             String url = UpdateForm_Url_TextBox.Text;
+            String warn = UpdateForm_Warn_RichTextBox.Text;
             Boolean checkFlag = true;
             StringBuilder checkMsg = new StringBuilder();
             if ("".Equals(title))
@@ -73,6 +73,7 @@ namespace ServerInfo
                 // 生成title
                 iniUtils.IniWriteValue(Config.IniPath, section, "title", title);
                 iniUtils.IniWriteValue(Config.IniPath, section, "url", url);
+                iniUtils.IniWriteValue(Config.IniPath, section, "warn", warn);
                 /* 生成新INI结束 ************************/
                 /* StartForm中添加新服务按钮 *************/
                 mainForm.updateButton(section);

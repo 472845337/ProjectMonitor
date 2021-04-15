@@ -29,12 +29,10 @@ namespace ProjectMonitor
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.Monitor_Button = new System.Windows.Forms.Button();
             this.Stop_Button = new System.Windows.Forms.Button();
             this.Add_Button = new System.Windows.Forms.Button();
-            this.timer_total = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // flowLayoutPanel
@@ -63,6 +61,7 @@ namespace ProjectMonitor
             this.Stop_Button.TabIndex = 3;
             this.Stop_Button.Text = "停止";
             this.Stop_Button.UseVisualStyleBackColor = true;
+            this.Stop_Button.Click += new System.EventHandler(this.Stop_Button_Click);
             // 
             // Add_Button
             // 
@@ -73,11 +72,6 @@ namespace ProjectMonitor
             this.Add_Button.Text = "添加";
             this.Add_Button.UseVisualStyleBackColor = true;
             this.Add_Button.Click += new System.EventHandler(this.Add_Button_Click);
-            // 
-            // timer_total
-            // 
-            this.timer_total.Interval = 1000;
-            this.timer_total.Tick += new System.EventHandler(this.timer_total_Tick);
             // 
             // MainForm
             // 
@@ -101,7 +95,6 @@ namespace ProjectMonitor
         private System.Windows.Forms.Button Monitor_Button;
         private System.Windows.Forms.Button Stop_Button;
         private System.Windows.Forms.Button Add_Button;
-        private System.Windows.Forms.Timer timer_total;
     }
 }
 

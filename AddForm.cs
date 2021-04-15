@@ -34,6 +34,7 @@ namespace ServerInfo
         {
             String title = AddForm_Title_TextBox.Text;
             String url = AddForm_Url_TextBox.Text;
+            String warn = AddForm_Warn_RichTextBox.Text;
             Boolean checkFlag = true;
             StringBuilder checkMsg = new StringBuilder();
             if ("".Equals(title))
@@ -58,6 +59,9 @@ namespace ServerInfo
                 // 生成title
                 iniUtils.IniWriteValue(Config.IniPath, newSection, "title", title);
                 iniUtils.IniWriteValue(Config.IniPath, newSection, "url", url);
+                iniUtils.IniWriteValue(Config.IniPath, newSection, "warn", warn);
+                // 添加默认是监听
+                iniUtils.IniWriteValue(Config.IniPath, newSection, "stat", "1");
                 /* 生成新INI结束 ************************/
                 /* StartForm中添加新服务按钮 *************/
                 mainForm.addButton(newSection);

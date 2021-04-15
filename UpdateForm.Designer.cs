@@ -35,6 +35,8 @@ namespace ServerInfo
             this.UpdateForm_Title_Label = new System.Windows.Forms.Label();
             this.UpdateForm_Cancel_Button = new System.Windows.Forms.Button();
             this.UpdateForm_Save_Button = new System.Windows.Forms.Button();
+            this.UpdateForm_Warn_RichTextBox = new System.Windows.Forms.RichTextBox();
+            this.UpdateForm_Warn_Label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // UpdateForm_Url_TextBox
@@ -71,7 +73,7 @@ namespace ServerInfo
             // 
             // UpdateForm_Cancel_Button
             // 
-            this.UpdateForm_Cancel_Button.Location = new System.Drawing.Point(298, 70);
+            this.UpdateForm_Cancel_Button.Location = new System.Drawing.Point(297, 206);
             this.UpdateForm_Cancel_Button.Name = "UpdateForm_Cancel_Button";
             this.UpdateForm_Cancel_Button.Size = new System.Drawing.Size(50, 23);
             this.UpdateForm_Cancel_Button.TabIndex = 13;
@@ -81,7 +83,7 @@ namespace ServerInfo
             // 
             // UpdateForm_Save_Button
             // 
-            this.UpdateForm_Save_Button.Location = new System.Drawing.Point(237, 70);
+            this.UpdateForm_Save_Button.Location = new System.Drawing.Point(236, 206);
             this.UpdateForm_Save_Button.Name = "UpdateForm_Save_Button";
             this.UpdateForm_Save_Button.Size = new System.Drawing.Size(55, 23);
             this.UpdateForm_Save_Button.TabIndex = 12;
@@ -89,11 +91,31 @@ namespace ServerInfo
             this.UpdateForm_Save_Button.UseVisualStyleBackColor = true;
             this.UpdateForm_Save_Button.Click += new System.EventHandler(this.UpdateForm_Save_Button_Click);
             // 
+            // UpdateForm_Warn_RichTextBox
+            // 
+            this.UpdateForm_Warn_RichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.UpdateForm_Warn_RichTextBox.Location = new System.Drawing.Point(64, 70);
+            this.UpdateForm_Warn_RichTextBox.Name = "UpdateForm_Warn_RichTextBox";
+            this.UpdateForm_Warn_RichTextBox.Size = new System.Drawing.Size(283, 130);
+            this.UpdateForm_Warn_RichTextBox.TabIndex = 19;
+            this.UpdateForm_Warn_RichTextBox.Text = "";
+            // 
+            // UpdateForm_Warn_Label
+            // 
+            this.UpdateForm_Warn_Label.AutoSize = true;
+            this.UpdateForm_Warn_Label.Location = new System.Drawing.Point(17, 70);
+            this.UpdateForm_Warn_Label.Name = "UpdateForm_Warn_Label";
+            this.UpdateForm_Warn_Label.Size = new System.Drawing.Size(40, 17);
+            this.UpdateForm_Warn_Label.TabIndex = 18;
+            this.UpdateForm_Warn_Label.Text = "提  醒";
+            // 
             // UpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 101);
+            this.ClientSize = new System.Drawing.Size(360, 241);
+            this.Controls.Add(this.UpdateForm_Warn_RichTextBox);
+            this.Controls.Add(this.UpdateForm_Warn_Label);
             this.Controls.Add(this.UpdateForm_Url_TextBox);
             this.Controls.Add(this.UpdateForm_Url_Label);
             this.Controls.Add(this.UpdateForm_Title_TextBox);
@@ -117,5 +139,7 @@ namespace ServerInfo
         private System.Windows.Forms.Label UpdateForm_Title_Label;
         private System.Windows.Forms.Button UpdateForm_Cancel_Button;
         private System.Windows.Forms.Button UpdateForm_Save_Button;
+        private System.Windows.Forms.RichTextBox UpdateForm_Warn_RichTextBox;
+        private System.Windows.Forms.Label UpdateForm_Warn_Label;
     }
 }

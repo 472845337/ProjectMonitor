@@ -35,11 +35,13 @@ namespace ServerInfo
             this.AddForm_Title_TextBox = new System.Windows.Forms.TextBox();
             this.AddForm_Url_Label = new System.Windows.Forms.Label();
             this.AddForm_Url_TextBox = new System.Windows.Forms.TextBox();
+            this.AddForm_Warn_Label = new System.Windows.Forms.Label();
+            this.AddForm_Warn_RichTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // AddForm_Save_Button
             // 
-            this.AddForm_Save_Button.Location = new System.Drawing.Point(237, 71);
+            this.AddForm_Save_Button.Location = new System.Drawing.Point(237, 206);
             this.AddForm_Save_Button.Name = "AddForm_Save_Button";
             this.AddForm_Save_Button.Size = new System.Drawing.Size(55, 23);
             this.AddForm_Save_Button.TabIndex = 0;
@@ -49,7 +51,7 @@ namespace ServerInfo
             // 
             // AddForm_Cancel_Button
             // 
-            this.AddForm_Cancel_Button.Location = new System.Drawing.Point(298, 71);
+            this.AddForm_Cancel_Button.Location = new System.Drawing.Point(298, 206);
             this.AddForm_Cancel_Button.Name = "AddForm_Cancel_Button";
             this.AddForm_Cancel_Button.Size = new System.Drawing.Size(50, 23);
             this.AddForm_Cancel_Button.TabIndex = 1;
@@ -89,11 +91,31 @@ namespace ServerInfo
             this.AddForm_Url_TextBox.Size = new System.Drawing.Size(284, 23);
             this.AddForm_Url_TextBox.TabIndex = 5;
             // 
+            // AddForm_Warn_Label
+            // 
+            this.AddForm_Warn_Label.AutoSize = true;
+            this.AddForm_Warn_Label.Location = new System.Drawing.Point(18, 74);
+            this.AddForm_Warn_Label.Name = "AddForm_Warn_Label";
+            this.AddForm_Warn_Label.Size = new System.Drawing.Size(40, 17);
+            this.AddForm_Warn_Label.TabIndex = 6;
+            this.AddForm_Warn_Label.Text = "提  醒";
+            // 
+            // AddForm_Warn_RichTextBox
+            // 
+            this.AddForm_Warn_RichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.AddForm_Warn_RichTextBox.Location = new System.Drawing.Point(65, 74);
+            this.AddForm_Warn_RichTextBox.Name = "AddForm_Warn_RichTextBox";
+            this.AddForm_Warn_RichTextBox.Size = new System.Drawing.Size(283, 126);
+            this.AddForm_Warn_RichTextBox.TabIndex = 7;
+            this.AddForm_Warn_RichTextBox.Text = "";
+            // 
             // AddForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 107);
+            this.ClientSize = new System.Drawing.Size(360, 241);
+            this.Controls.Add(this.AddForm_Warn_RichTextBox);
+            this.Controls.Add(this.AddForm_Warn_Label);
             this.Controls.Add(this.AddForm_Url_TextBox);
             this.Controls.Add(this.AddForm_Url_Label);
             this.Controls.Add(this.AddForm_Title_TextBox);
@@ -120,5 +142,7 @@ namespace ServerInfo
         private System.Windows.Forms.TextBox AddForm_Title_TextBox;
         private System.Windows.Forms.Label AddForm_Url_Label;
         private System.Windows.Forms.TextBox AddForm_Url_TextBox;
+        private System.Windows.Forms.Label AddForm_Warn_Label;
+        private System.Windows.Forms.RichTextBox AddForm_Warn_RichTextBox;
     }
 }
