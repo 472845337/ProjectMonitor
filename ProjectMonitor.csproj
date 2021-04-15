@@ -9,7 +9,6 @@
   <ItemGroup>
     <None Remove="ini\system.ini" />
     <None Remove="Monitor.ini" />
-    <None Remove="mstsc.ico" />
     <None Remove="resource\icons\computer.ico" />
   </ItemGroup>
 
@@ -18,9 +17,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
     <AdditionalFiles Include="ini\Monitor.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AdditionalFiles>
-    <AdditionalFiles Include="mstsc.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
     <AdditionalFiles Include="resource\icons\computer.ico">

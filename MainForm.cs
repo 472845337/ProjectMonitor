@@ -82,7 +82,7 @@ namespace ProjectMonitor
             // 右键按钮添加事件
             ContextMenuStrip rightMenu = new ContextMenuStrip();
             ToolStripMenuItem monitorItem = new ToolStripMenuItem();
-            monitorItem.Name = "ServerRightMenu_Monitor";
+            monitorItem.Name = "MouseRightMenu_Monitor";
             monitorItem.Text = "监听";
             monitorItem.Tag = section;
             monitorItem.Click += new EventHandler(BtnRightMonitorClick);
@@ -92,7 +92,7 @@ namespace ProjectMonitor
             }
             rightMenu.Items.Add(monitorItem);
             ToolStripMenuItem stopItem = new ToolStripMenuItem();
-            stopItem.Name = "ServerRightMenu_Stop";
+            stopItem.Name = "MouseRightMenu_Stop";
             stopItem.Text = "停止";
             stopItem.Tag = section;
             stopItem.Click += new EventHandler(BtnRightStopClick);
@@ -102,7 +102,7 @@ namespace ProjectMonitor
             }
             rightMenu.Items.Add(stopItem);
             ToolStripMenuItem updateItem = new ToolStripMenuItem();
-            updateItem.Name = "ServerRightMenu_Update";
+            updateItem.Name = "MouseRightMenu_Update";
             updateItem.Text = "修改";
             updateItem.Tag = section;
             updateItem.Click += new EventHandler(BtnRightUpdateClick);
