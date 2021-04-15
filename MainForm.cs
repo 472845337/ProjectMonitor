@@ -41,6 +41,8 @@ namespace ProjectMonitor
         {
 
             String buttonText = iniUtils.IniReadValue(Config.IniPath, section, "title");
+            // 状态，是暂停还是启动状态
+            String stat = iniUtils.IniReadValue(Config.IniPath, section, "stat");
             Button button = new Button();
             button.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             button.Location = new System.Drawing.Point(3, 0);
@@ -66,12 +68,20 @@ namespace ProjectMonitor
             monitorItem.Text = "监听";
             monitorItem.Tag = section;
             monitorItem.Click += new EventHandler(BtnRightMonitorClick);
+            if ("0".Equals(stat))
+            {
+                monitorItem.Enabled = false;
+            }
             rightMenu.Items.Add(monitorItem);
             ToolStripMenuItem stopItem = new ToolStripMenuItem();
             stopItem.Name = "ServerRightMenu_Stop";
             stopItem.Text = "停止";
             stopItem.Tag = section;
             stopItem.Click += new EventHandler(BtnRightStopClick);
+            if ("1".Equals(stat))
+            {
+                stopItem.Enabled = false;
+            }
             rightMenu.Items.Add(stopItem);
             ToolStripMenuItem updateItem = new ToolStripMenuItem();
             updateItem.Name = "ServerRightMenu_Update";
@@ -81,7 +91,9 @@ namespace ProjectMonitor
             rightMenu.Items.Add(updateItem);
             button.ContextMenuStrip = rightMenu;
             flowLayoutPanel.Controls.Add(button);
+                     
         }
+
         /// <summary>
         /// 修改按钮
         /// </summary>
@@ -146,5 +158,28 @@ namespace ProjectMonitor
             addForm.setMainForm(this);
             addForm.ShowDialog();
         }
+
+        /// <summary>
+        /// 监控按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Monitor_Button_Click(object sender, EventArgs e)
+        {
+            timer_total.Interval = 1000;
+            timer_total.Enabled = true;
+        }
+
+        /// <summary>
+        /// 定时器任务
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer_total_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }
