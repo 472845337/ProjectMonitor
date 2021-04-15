@@ -33,9 +33,9 @@ namespace ServerInfo
         private void UpdateForm_Load(object sender, EventArgs e)
         {
             
-            String title = iniUtils.IniReadValue(Config.IniPath, section, "title");
-            String url = iniUtils.IniReadValue( Config.IniPath, section, "url");
-            String warn = iniUtils.IniReadValue(Config.IniPath, section, "warn");
+            String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
+            String url = iniUtils.IniReadValue( Config.MonitorIniPath, section, "url");
+            String warn = iniUtils.IniReadValue(Config.MonitorIniPath, section, "warn");
             UpdateForm_Title_TextBox.Text = title;
             UpdateForm_Url_TextBox.Text = url;
             UpdateForm_Warn_RichTextBox.Text = warn;
@@ -71,9 +71,9 @@ namespace ServerInfo
             {
                 /** 数据正常，修改ini数据，执行StartForm添加按钮和新增rdp文件操作 */
                 // 生成title
-                iniUtils.IniWriteValue(Config.IniPath, section, "title", title);
-                iniUtils.IniWriteValue(Config.IniPath, section, "url", url);
-                iniUtils.IniWriteValue(Config.IniPath, section, "warn", warn);
+                iniUtils.IniWriteValue(Config.MonitorIniPath, section, "title", title);
+                iniUtils.IniWriteValue(Config.MonitorIniPath, section, "url", url);
+                iniUtils.IniWriteValue(Config.MonitorIniPath, section, "warn", warn);
                 /* 生成新INI结束 ************************/
                 /* StartForm中添加新服务按钮 *************/
                 mainForm.updateButton(section);

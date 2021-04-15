@@ -57,11 +57,11 @@ namespace ServerInfo
                 /* 生成新INI ****************************/
                 String newSection = Guid.NewGuid().ToString();
                 // 生成title
-                iniUtils.IniWriteValue(Config.IniPath, newSection, "title", title);
-                iniUtils.IniWriteValue(Config.IniPath, newSection, "url", url);
-                iniUtils.IniWriteValue(Config.IniPath, newSection, "warn", warn);
+                iniUtils.IniWriteValue(Config.MonitorIniPath, newSection, "title", title);
+                iniUtils.IniWriteValue(Config.MonitorIniPath, newSection, "url", url);
+                iniUtils.IniWriteValue(Config.MonitorIniPath, newSection, "warn", warn);
                 // 添加默认是监听
-                iniUtils.IniWriteValue(Config.IniPath, newSection, "stat", "1");
+                iniUtils.IniWriteValue(Config.MonitorIniPath, newSection, "stat", "1");
                 /* 生成新INI结束 ************************/
                 /* StartForm中添加新服务按钮 *************/
                 mainForm.addButton(newSection);

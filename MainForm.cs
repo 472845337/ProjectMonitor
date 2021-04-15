@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -23,10 +24,26 @@ namespace ProjectMonitor
         }
         // 不能使用窗体中的timer控件，要使用线程timer
         System.Timers.Timer timer = new System.Timers.Timer();
+        // 监听线程map
+        Dictionary<String, Thread> dic = new Dictionary<string, Thread>();
         
         private void MainForm_Load(object sender, EventArgs e)
         {
-            List<String> sectionList = iniUtils.ReadSections(Config.IniPath);
+            // 系统参数读取
+            String interval = iniUtils.IniReadValue(Config.SystemIniPath, "system", "interval");
+            String timeout = iniUtils.IniReadValue(Config.SystemIniPath, "system", "timeout");
+            if (null == interval || "".Equals(interval))
+            {
+                interval = Convert.ToString(TimerInterval_Input.Minimum);
+            }
+            if (null == timeout || "".Equals(timeout))
+            {
+                timeout = Convert.ToString(Timeout_Input.Minimum);
+            }
+            TimerInterval_Input.Value = int.Parse(interval);
+            Timeout_Input.Value = int.Parse(timeout);
+
+            List<String> sectionList = iniUtils.ReadSections(Config.MonitorIniPath);
             for (int i = 0; i < sectionList.Count; i++)
             {
                 String section = sectionList[i];
@@ -45,9 +62,9 @@ namespace ProjectMonitor
         public void addButton(String section)
         {
 
-            String buttonText = iniUtils.IniReadValue(Config.IniPath, section, "title");
+            String buttonText = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
             // 状态，是暂停还是启动状态
-            String stat = iniUtils.IniReadValue(Config.IniPath, section, "stat");
+            String stat = iniUtils.IniReadValue(Config.MonitorIniPath, section, "stat");
             Button button = new Button();
             button.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             button.Location = new System.Drawing.Point(3, 0);
@@ -107,7 +124,7 @@ namespace ProjectMonitor
         public void updateButton(String section)
         {
             Button btn = (Button)flowLayoutPanel.Controls[section];
-            String title = iniUtils.IniReadValue(Config.IniPath, section, "title");
+            String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
             btn.Text = title;
         }
         // 鼠标移动到按钮事件
@@ -116,7 +133,7 @@ namespace ProjectMonitor
         {
             Button currentBtn = (Button)sender;
             String section = currentBtn.Name;
-            String title = iniUtils.IniReadValue(Config.IniPath, section, "title");
+            String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
 
             // 设置显示样式
             //toolTip1.AutoPopDelay = 5000;//提示信息的可见时间
@@ -134,7 +151,7 @@ namespace ProjectMonitor
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             // 开始监听状态置为1
-            iniUtils.IniWriteValue(Config.IniPath, (String)menuItem.Tag, "stat", "1");
+            iniUtils.IniWriteValue(Config.MonitorIniPath, (String)menuItem.Tag, "stat", "1");
         }
         /**
          * 右键停止按钮点击事件
@@ -143,7 +160,7 @@ namespace ProjectMonitor
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             // 停止监听
-            iniUtils.IniWriteValue(Config.IniPath, (String)menuItem.Tag, "stat", "0");
+            iniUtils.IniWriteValue(Config.MonitorIniPath, (String)menuItem.Tag, "stat", "0");
         }
 
         /**
@@ -184,33 +201,44 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void timer_total_Tick(object sender, EventArgs e)
         {
-            List<String> sectionList = iniUtils.ReadSections(Config.IniPath);
+            List<String> sectionList = iniUtils.ReadSections(Config.MonitorIniPath);
             for (int i = 0; i < sectionList.Count; i++)
             {
 
                 String section = sectionList[i];
-                String title = iniUtils.IniReadValue(Config.IniPath, section, "title");
-                String url = iniUtils.IniReadValue(Config.IniPath, section, "url");
-                String warn = iniUtils.IniReadValue(Config.IniPath, section, "warn");
-                String stat = iniUtils.IniReadValue(Config.IniPath, section, "stat");
+                
+                String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
+                String url = iniUtils.IniReadValue(Config.MonitorIniPath, section, "url");
+                String warn = iniUtils.IniReadValue(Config.MonitorIniPath, section, "warn");
+                String stat = iniUtils.IniReadValue(Config.MonitorIniPath, section, "stat");
                 // 根据section获取控件
                 object buttonObj = GetControlInstance(flowLayoutPanel, section);
 
                 if ("".Equals(stat) || "1".Equals(stat))
                 {
-                    String result = HttpUtils.postRequest(url, "");
-                    if ("success".Equals(result))
+                    Monitor monitor = new Monitor(title, url, warn, ((Button)buttonObj));
+                    // 查找线程字典中是否已经存在该线程
+                    if (dic.ContainsKey(section))
                     {
-                        ((Button)buttonObj).BackColor = Color.LimeGreen;
+                        Thread sectonThread = dic[section];
+                        if (sectonThread.ThreadState.Equals(ThreadState.Running))
+                        {
+                            // 线程还在运行中
+                            continue;
+                        }
+                        else
+                        {
+                            sectonThread = new Thread(new ThreadStart(monitor.monitorUrl));
+                            sectonThread.Start();
+                        }
                     }
                     else
                     {
-                        ((Button)buttonObj).BackColor = Color.OrangeRed;
-                        if (!"".Equals(warn))
-                        {
-                            HttpUtils.postRequest(warn, title+"服务异常！");
-                        }
+                        Thread sectonThread = new Thread(new ThreadStart(monitor.monitorUrl));
+                        sectonThread.Start();
+                        dic.Add(section, sectonThread);
                     }
+                    
                 }
                 else
                 {
@@ -219,6 +247,10 @@ namespace ProjectMonitor
             }
         }
 
+        private void monitorUrl()
+        {
+            
+        }
         /// <summary>
         /// 根据指定容器和控件名字，获得控件
         /// </summary>

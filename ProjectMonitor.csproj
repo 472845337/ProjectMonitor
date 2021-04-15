@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ini\system.ini" />
     <None Remove="Monitor.ini" />
     <None Remove="mstsc.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Monitor.ini">
+    <AdditionalFiles Include="ini\System.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Include="ini\Monitor.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
     <AdditionalFiles Include="mstsc.ico">
