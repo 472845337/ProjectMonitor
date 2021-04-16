@@ -1,4 +1,5 @@
-﻿using ServerInfo;
+﻿using ProjectMonitor.utils;
+using ServerInfo;
 using ServerInfo.config;
 using ServerInfo.utils;
 using System;
@@ -24,20 +25,37 @@ namespace ProjectMonitor
         
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // 系统参数读取
-            String interval = iniUtils.IniReadValue(Config.SystemIniPath, "system", "interval");
-            String timeout = iniUtils.IniReadValue(Config.SystemIniPath, "system", "timeout");
-            if (null == interval || "".Equals(interval))
+            /// 系统参数读取
+            /// 
+            // 计时器频率
+            String intervalStr = iniUtils.IniReadValue(Config.SystemIniPath, "system", "interval");
+            // 请求超时时间
+            String timeoutStr = iniUtils.IniReadValue(Config.SystemIniPath, "system", "timeout");
+            int interval = 0;
+            int timeout = 0;
+            if (null == intervalStr || "".Equals(intervalStr))
             {
-                interval = Convert.ToString(TimerInterval_Input.Minimum);
+                interval = Decimal.ToInt32(TimerInterval_Input.Minimum);
             }
-            if (null == timeout || "".Equals(timeout))
+            else
             {
-                timeout = Convert.ToString(Timeout_Input.Minimum);
+                interval = int.Parse(intervalStr);
             }
-            TimerInterval_Input.Value = int.Parse(interval);
-            Timeout_Input.Value = int.Parse(timeout);
-
+            if (null == timeoutStr || "".Equals(timeoutStr))
+            {
+                timeout = Decimal.ToInt32(Timeout_Input.Minimum);
+            }
+            else
+            {
+                timeout = int.Parse(timeoutStr);
+            }
+            TimerInterval_Input.Value = interval;
+            Timeout_Input.Value = timeout;
+            Config.interval = interval;
+            Config.timeout = timeout;
+            // 主窗体赋值，以便其它地方调用
+            Config.mainForm = this;
+            // 动态创建按钮控件
             List<String> sectionList = iniUtils.ReadSections(Config.MonitorIniPath);
             for (int i = 0; i < sectionList.Count; i++)
             {
@@ -66,7 +84,17 @@ namespace ProjectMonitor
             button.Name = section;
             button.Size = new System.Drawing.Size(90, 90);
             button.TabIndex = 0;
-            button.BackColor = Color.AliceBlue;
+            if ("0".Equals(stat))
+            {
+                // 当前任务是暂停
+
+            }else if ("1".Equals(stat))
+            {
+                // 当前任务是启动
+
+            }
+            setButtonBackColor(button, Color.AliceBlue);
+
             Image image = Image.FromFile(@"resource\icons\computer.ico");
             button.BackgroundImageLayout = ImageLayout.Stretch;
             button.BackgroundImage = image;
@@ -82,27 +110,19 @@ namespace ProjectMonitor
             // 右键按钮添加事件
             ContextMenuStrip rightMenu = new ContextMenuStrip();
             ToolStripMenuItem monitorItem = new ToolStripMenuItem();
-            monitorItem.Name = "MouseRightMenu_Monitor";
+            monitorItem.Name = section + "MouseRightMenu_Monitor";
             monitorItem.Text = "监听";
             monitorItem.Tag = section;
             monitorItem.Click += new EventHandler(BtnRightMonitorClick);
-            if ("0".Equals(stat))
-            {
-                monitorItem.Enabled = false;
-            }
             rightMenu.Items.Add(monitorItem);
             ToolStripMenuItem stopItem = new ToolStripMenuItem();
-            stopItem.Name = "MouseRightMenu_Stop";
+            stopItem.Name = section + "MouseRightMenu_Stop";
             stopItem.Text = "停止";
             stopItem.Tag = section;
             stopItem.Click += new EventHandler(BtnRightStopClick);
-            if ("1".Equals(stat))
-            {
-                stopItem.Enabled = false;
-            }
             rightMenu.Items.Add(stopItem);
             ToolStripMenuItem updateItem = new ToolStripMenuItem();
-            updateItem.Name = "MouseRightMenu_Update";
+            updateItem.Name = section + "MouseRightMenu_Update";
             updateItem.Text = "修改";
             updateItem.Tag = section;
             updateItem.Click += new EventHandler(BtnRightUpdateClick);
@@ -185,8 +205,17 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void Monitor_Button_Click(object sender, EventArgs e)
         {
-            timer.Interval = 1000;
+            timer.Interval = Config.interval * 1000;
             timer.Enabled = true;
+        }
+        /// <summary>
+        /// 停止按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Stop_Button_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
         }
 
         /// <summary>
@@ -207,7 +236,7 @@ namespace ProjectMonitor
                 String warn = iniUtils.IniReadValue(Config.MonitorIniPath, section, "warn");
                 String stat = iniUtils.IniReadValue(Config.MonitorIniPath, section, "stat");
                 // 根据section获取控件
-                object buttonObj = GetControlInstance(flowLayoutPanel, section);
+                object buttonObj = ControlUtils.GetControlInstance(flowLayoutPanel, section);
 
                 if ("".Equals(stat) || "1".Equals(stat))
                 {
@@ -242,55 +271,34 @@ namespace ProjectMonitor
             }
         }
 
-        private void monitorUrl()
-        {
-            
-        }
         /// <summary>
-        /// 根据指定容器和控件名字，获得控件
+        /// 时间频率框值改变事件
         /// </summary>
-        /// <param name="obj">容器</param>
-        /// <param name="strControlName">控件名字</param>
-        /// <returns>控件</returns>
-        private object GetControlInstance(object obj, string strControlName)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TimerInterval_Input_ValueChanged(object sender, EventArgs e)
         {
-            IEnumerator Controls = null;//所有控件
-            Control c = null;//当前控件
-            Object cResult = null;//查找结果
-            if (obj.GetType() == this.GetType())//窗体
-            {
-                Controls = this.Controls.GetEnumerator();
-            }
-            else//控件
-            {
-                Controls = ((Control)obj).Controls.GetEnumerator();
-            }
-            while (Controls.MoveNext())//遍历操作
-            {
-                c = (Control)Controls.Current;//当前控件
-                if (c.HasChildren)//当前控件是个容器
-                {
-                    cResult = GetControlInstance(c, strControlName);//递归查找
-                    if (cResult == null)//当前容器中没有，跳出，继续查找
-                        continue;
-                    else
-                    {
-                        //找到控件，跳出循环
-                        break;
-                    }
-                }
-                else if (c.Name == strControlName)//不是容器，同时找到控件，返回
-                {
-                    cResult = c;
-                    break;
-                }
-            }
-            return cResult;//控件不存在
+            int interval = Decimal.ToInt32(TimerInterval_Input.Value);
+            iniUtils.IniWriteValue(Config.SystemIniPath, "system", "interval", Convert.ToString(interval));
+            Config.interval = interval;
         }
 
-        private void Stop_Button_Click(object sender, EventArgs e)
+
+        /// <summary>
+        /// 超时框数值改变事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timeout_Input_ValueChanged(object sender, EventArgs e)
         {
-            timer.Enabled = false;
+            int timeout = Decimal.ToInt32(Timeout_Input.Value);
+            iniUtils.IniWriteValue(Config.SystemIniPath, "system", "timeout", Convert.ToString(timeout));
+            Config.timeout = timeout;
+        }
+
+        private void setButtonBackColor(Button button, Color color)
+        {
+            button.BackColor = color;
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ProjectMonitor;
+using System;
 
 namespace ServerInfo.config
 {
@@ -9,5 +8,11 @@ namespace ServerInfo.config
         public static String MonitorIniPath = "ini/Monitor.ini";
         public static String SystemIniPath = "ini/System.ini";
         public static String AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+        // 主窗口，用于其它窗口或方法中
+        public static MainForm mainForm;
+        // 单位是秒
+        public static int interval;
+        // 单位是秒
+        public static int timeout;
     }
 }

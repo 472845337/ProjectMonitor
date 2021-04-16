@@ -1,4 +1,5 @@
 ﻿using ProjectMonitor.utils;
+using ServerInfo.config;
 using System;
 using System.IO;
 using System.Net;
@@ -11,20 +12,22 @@ namespace ProjectMonitor
         public static String postRequest(String url, String data, String contentType)
         {
             //定义request并设置request的路径
-            WebRequest request = WebRequest.Create(url);
-
+            HttpWebRequest request = HttpWebRequest.CreateHttp(url);
+            // 设置超时时间
+            request.Timeout = Config.timeout * 1000;
             //定义请求的方式
             request.Method = "POST";
             //设置request的MIME类型及内容长度
             request.ContentType = StringUtils.isEmpty(contentType)? "application/x-www-form-urlencoded":contentType;
+            request.KeepAlive = false;
             //定义response为前面的request响应
-            WebResponse response = null;
+            HttpWebResponse response = null;
             Stream dataStream = null;
             StreamReader reader = null;
             string responseFromServer = "";
             try
             {
-                response = request.GetResponse();
+                response = (HttpWebResponse)request.GetResponse();
 
                 //定义response字符流
                 dataStream = response.GetResponseStream();

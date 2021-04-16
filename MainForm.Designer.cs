@@ -106,6 +106,7 @@ namespace ProjectMonitor
             0,
             0,
             0});
+            this.TimerInterval_Input.ValueChanged += new System.EventHandler(this.TimerInterval_Input_ValueChanged);
             // 
             // TimerIntervalUnit_Label
             // 
@@ -155,6 +156,7 @@ namespace ProjectMonitor
             0,
             0,
             0});
+            this.Timeout_Input.ValueChanged += new System.EventHandler(this.Timeout_Input_ValueChanged);
             // 
             // MainForm
             // 
@@ -171,7 +173,10 @@ namespace ProjectMonitor
             this.Controls.Add(this.Stop_Button);
             this.Controls.Add(this.Monitor_Button);
             this.Controls.Add(this.flowLayoutPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "监听器";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.TimerInterval_Input)).EndInit();
