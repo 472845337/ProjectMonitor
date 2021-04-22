@@ -53,6 +53,17 @@ namespace ProjectMonitor
             Timeout_Input.Value = timeout;
             Config.interval = interval;
             Config.timeout = timeout;
+            // 监控邮件配置
+            String emailServer = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "server");
+            String emailPort = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "port");
+            String fromEmail = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "fromEmail");
+            String username = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "username");
+            String password = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "password");
+            Config.emailServer = emailServer;
+            Config.emailPort = emailPort;
+            Config.fromEmail = fromEmail;
+            Config.username = username;
+            Config.password = password;
             // 主窗体赋值，以便其它地方调用
             Config.mainForm = this;
             // 动态创建按钮控件

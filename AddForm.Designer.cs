@@ -102,7 +102,6 @@ namespace ServerInfo
             // 
             // AddForm_Warn_RichTextBox
             // 
-            this.AddForm_Warn_RichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.AddForm_Warn_RichTextBox.Location = new System.Drawing.Point(65, 74);
             this.AddForm_Warn_RichTextBox.Name = "AddForm_Warn_RichTextBox";
             this.AddForm_Warn_RichTextBox.Size = new System.Drawing.Size(283, 126);

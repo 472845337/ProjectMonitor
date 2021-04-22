@@ -93,7 +93,6 @@ namespace ServerInfo
             // 
             // UpdateForm_Warn_RichTextBox
             // 
-            this.UpdateForm_Warn_RichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.UpdateForm_Warn_RichTextBox.Location = new System.Drawing.Point(64, 70);
             this.UpdateForm_Warn_RichTextBox.Name = "UpdateForm_Warn_RichTextBox";
             this.UpdateForm_Warn_RichTextBox.Size = new System.Drawing.Size(283, 130);

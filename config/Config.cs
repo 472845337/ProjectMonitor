@@ -14,5 +14,15 @@ namespace ServerInfo.config
         public static int interval;
         // 单位是秒
         public static int timeout;
+
+        public static String emailServer;
+
+        public static String emailPort;
+
+        public static String fromEmail;
+
+        public static String username;
+
+        public static String password;
     }
 }
