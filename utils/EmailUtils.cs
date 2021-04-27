@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerInfo.config;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
@@ -115,7 +116,7 @@ namespace ProjectMonitor.utils
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                LogUtils.writeLog(ex.ToString(), Config.logFileName);
             }
         }
     }

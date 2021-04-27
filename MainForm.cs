@@ -64,6 +64,9 @@ namespace ProjectMonitor
             Config.fromEmail = fromEmail;
             Config.username = username;
             Config.password = password;
+            // 日志文件路径
+            String logFileName = iniUtils.IniReadValue(Config.SystemIniPath, "Log", "FileName");
+            Config.logFileName = logFileName;
             // 主窗体赋值，以便其它地方调用
             Config.mainForm = this;
             // 动态创建按钮控件

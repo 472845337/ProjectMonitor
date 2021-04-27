@@ -7,6 +7,7 @@ namespace ServerInfo.config
     {
         public static String MonitorIniPath = "ini/Monitor.ini";
         public static String SystemIniPath = "ini/System.ini";
+        public static String logFileName;
         public static String AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
         // 主窗口，用于其它窗口或方法中
         public static MainForm mainForm;
