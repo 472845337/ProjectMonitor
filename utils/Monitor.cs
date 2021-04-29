@@ -1,4 +1,5 @@
-﻿using ProjectMonitor.utils;
+﻿using Newtonsoft.Json;
+using ProjectMonitor.utils;
 using ServerInfo.config;
 using System;
 using System.Drawing;
@@ -37,8 +38,22 @@ namespace ProjectMonitor
                         String warnSingle = warnArray[index];
                         if (warnSingle.Contains("qyapi.weixin.qq.com"))
                         {
-                            // 企业微信机器人地址
-                            HttpUtils.postRequest(warn, title + "服务异常！", HttpUtils.CONTENT_TYPE_APPLICATION_JSON);
+                            try
+                            {
+                                // 企业微信机器人地址
+                                WorkWxSendMessage workWxSendMessage = new WorkWxSendMessage();
+                                workWxSendMessage.msgtype = WorkWxSendMessage.MSGTYPE_TEXT;
+                                WorkWxSendMessage.Text text = new WorkWxSendMessage.Text();
+                                text.content = title + "服务异常！";
+                                workWxSendMessage.text = text;
+                                String robotSendContentJson = JsonConvert.SerializeObject(workWxSendMessage);
+                                LogUtils.writeLog(robotSendContentJson);
+                                HttpUtils.postRequest(warn, robotSendContentJson, HttpUtils.CONTENT_TYPE_APPLICATION_JSON);
+                            }
+                            catch (Exception e)
+                            {
+                                LogUtils.writeLog(e.StackTrace);
+                            }
                         } else if (warnSingle.Contains("@163.com") || warnSingle.Contains("@qq.com") || warnSingle.Contains("@163.com"))
                         {
                             // 邮箱

@@ -54,18 +54,18 @@ namespace ProjectMonitor
             Config.interval = interval;
             Config.timeout = timeout;
             // 监控邮件配置
-            String emailServer = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "server");
-            String emailPort = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "port");
-            String fromEmail = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "fromEmail");
-            String username = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "username");
-            String password = iniUtils.IniReadValue(Config.SystemIniPath, "Email", "password");
+            String emailServer = iniUtils.IniReadValue(Config.SystemIniPath, "email", "server");
+            String emailPort = iniUtils.IniReadValue(Config.SystemIniPath, "email", "port");
+            String fromEmail = iniUtils.IniReadValue(Config.SystemIniPath, "email", "fromEmail");
+            String username = iniUtils.IniReadValue(Config.SystemIniPath, "email", "username");
+            String password = iniUtils.IniReadValue(Config.SystemIniPath, "email", "password");
             Config.emailServer = emailServer;
             Config.emailPort = emailPort;
             Config.fromEmail = fromEmail;
             Config.username = username;
             Config.password = password;
             // 日志文件路径
-            String logFileName = iniUtils.IniReadValue(Config.SystemIniPath, "Log", "FileName");
+            String logFileName = iniUtils.IniReadValue(Config.SystemIniPath, "log", "filename");
             Config.logFileName = logFileName;
             // 主窗体赋值，以便其它地方调用
             Config.mainForm = this;
@@ -295,6 +295,7 @@ namespace ProjectMonitor
             int interval = Decimal.ToInt32(TimerInterval_Input.Value);
             iniUtils.IniWriteValue(Config.SystemIniPath, "system", "interval", Convert.ToString(interval));
             Config.interval = interval;
+            timer.Interval = interval * 1000;
         }
 
 

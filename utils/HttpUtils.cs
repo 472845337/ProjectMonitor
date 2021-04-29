@@ -3,11 +3,13 @@ using ServerInfo.config;
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace ProjectMonitor
 {
     class HttpUtils
     {
+        private static readonly string DefaultUserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
         public static String CONTENT_TYPE_APPLICATION_JSON = "application/json";
         public static String postRequest(String url, String data, String contentType)
         {
@@ -17,6 +19,7 @@ namespace ProjectMonitor
             request.Timeout = Config.timeout * 1000;
             //定义请求的方式
             request.Method = "POST";
+            request.UserAgent = DefaultUserAgent;
             //设置request的MIME类型及内容长度
             request.ContentType = StringUtils.isEmpty(contentType)? "application/x-www-form-urlencoded":contentType;
             request.KeepAlive = false;
@@ -27,17 +30,22 @@ namespace ProjectMonitor
             string responseFromServer = "";
             try
             {
+                Stream writer = request.GetRequestStream();
+                byte[] dataArray = Encoding.UTF8.GetBytes(data);
+                writer.Write(dataArray, 0, dataArray.Length);
+                writer.Flush(); 
+
                 response = (HttpWebResponse)request.GetResponse();
 
                 //定义response字符流
                 dataStream = response.GetResponseStream();
                 reader = new StreamReader(dataStream);
                 responseFromServer = reader.ReadToEnd();//读取所有
-                Console.WriteLine(responseFromServer);
+                LogUtils.writeLog(responseFromServer);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                LogUtils.writeLog(e.Message);
             }
             finally
             {
