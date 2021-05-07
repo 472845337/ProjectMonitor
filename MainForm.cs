@@ -172,7 +172,8 @@ namespace ProjectMonitor
         public void updateButton(String section)
         {
             Button btn = (Button)flowLayoutPanel.Controls[section];
-            String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
+            MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+            String title = monitorSection.title;
             btn.Text = title;
         }
         // 鼠标移动到按钮事件
@@ -181,7 +182,8 @@ namespace ProjectMonitor
         {
             Button currentBtn = (Button)sender;
             String section = currentBtn.Name;
-            String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
+            MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+            String title = monitorSection.title;
 
             // 设置显示样式
             //toolTip1.AutoPopDelay = 5000;//提示信息的可见时间
