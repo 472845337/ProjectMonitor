@@ -1,4 +1,5 @@
-﻿using ProjectMonitor.utils;
+﻿using Newtonsoft.Json;
+using ProjectMonitor.utils;
 using ServerInfo;
 using ServerInfo.config;
 using ServerInfo.utils;
@@ -80,6 +81,10 @@ namespace ProjectMonitor
             // 给时间控件绑定事件
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_total_Tick);
             timer.AutoReset = true;
+
+            // 按钮可用初始化
+            Monitor_Button.Enabled = true;
+            Stop_Button.Enabled = false;
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace ProjectMonitor
             button.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             button.Location = new System.Drawing.Point(3, 0);
             button.Name = section;
-            button.Size = new System.Drawing.Size(90, 90);
+            button.Size = new System.Drawing.Size(90, 70);
             button.TabIndex = 0;
             if ("0".Equals(stat))
             {
@@ -110,15 +115,13 @@ namespace ProjectMonitor
             setButtonBackColor(button, Color.AliceBlue);
 
             Image image = Image.FromFile(@"resource\icons\computer.ico");
-            button.BackgroundImageLayout = ImageLayout.Stretch;
+            button.BackgroundImageLayout = ImageLayout.None;
             button.BackgroundImage = image;
 
             button.Text = buttonText;
             button.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            button.Font = new Font("微软雅黑", 10);
+            button.Font = new Font("微软雅黑", 8);
 
-            button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            // button.MouseClick += new MouseEventHandler(BtnClick);
             button.MouseHover += new EventHandler(BtnMouseHover);
 
             // 右键按钮添加事件
@@ -219,8 +222,11 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void Monitor_Button_Click(object sender, EventArgs e)
         {
+            Monitor_Button.Enabled = false;
+            Stop_Button.Enabled = true;
             timer.Interval = Config.interval * 1000;
             timer.Enabled = true;
+
         }
         /// <summary>
         /// 停止按钮点击事件
@@ -229,6 +235,8 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void Stop_Button_Click(object sender, EventArgs e)
         {
+            Monitor_Button.Enabled = true;
+            Stop_Button.Enabled = false;
             timer.Enabled = false;
         }
 
@@ -314,6 +322,19 @@ namespace ProjectMonitor
         private void setButtonBackColor(Button button, Color color)
         {
             button.BackColor = color;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // 企业微信机器人地址
+            WorkWxSendMessage workWxSendMessage = new WorkWxSendMessage();
+            workWxSendMessage.msgtype = WorkWxSendMessage.MSGTYPE_TEXT;
+            WorkWxSendMessage.Text text = new WorkWxSendMessage.Text();
+            text.content = "测试服务异常！";
+            workWxSendMessage.text = text;
+            String robotSendContentJson = JsonConvert.SerializeObject(workWxSendMessage);
+            String result = HttpUtils.postRequest("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=455329a4-9065-4b79-8ccd-d8bf61d58815", robotSendContentJson, HttpUtils.CONTENT_TYPE_APPLICATION_JSON);
+            LogUtils.writeLog(result);
         }
     }
 }

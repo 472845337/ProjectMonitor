@@ -39,6 +39,7 @@ namespace ProjectMonitor
             this.Timeout_Label = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Timeout_Input = new System.Windows.Forms.NumericUpDown();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimerInterval_Input)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Timeout_Input)).BeginInit();
             this.SuspendLayout();
@@ -158,11 +159,24 @@ namespace ProjectMonitor
             0});
             this.Timeout_Input.ValueChanged += new System.EventHandler(this.Timeout_Input_ValueChanged);
             // 
+            // button1
+            // 
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button1.Location = new System.Drawing.Point(389, 411);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(44, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "测试";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(659, 430);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.Timeout_Input);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Timeout_Label);
@@ -198,6 +212,7 @@ namespace ProjectMonitor
         private System.Windows.Forms.Label Timeout_Label;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown Timeout_Input;
+        private System.Windows.Forms.Button button1;
     }
 }
 
