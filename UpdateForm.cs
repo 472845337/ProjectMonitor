@@ -1,4 +1,5 @@
 ﻿using ProjectMonitor;
+using ProjectMonitor.config;
 using ServerInfo.config;
 using ServerInfo.utils;
 using System;
@@ -32,10 +33,10 @@ namespace ServerInfo
 
         private void UpdateForm_Load(object sender, EventArgs e)
         {
-            
-            String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
-            String url = iniUtils.IniReadValue( Config.MonitorIniPath, section, "url");
-            String warn = iniUtils.IniReadValue(Config.MonitorIniPath, section, "warn");
+            MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+            String title = monitorSection.title;
+            String url = monitorSection.url;
+            String warn = monitorSection.warn;
             UpdateForm_Title_TextBox.Text = title;
             UpdateForm_Url_TextBox.Text = url;
             UpdateForm_Warn_RichTextBox.Text = warn;
@@ -75,9 +76,15 @@ namespace ServerInfo
                 iniUtils.IniWriteValue(Config.MonitorIniPath, section, "url", url);
                 iniUtils.IniWriteValue(Config.MonitorIniPath, section, "warn", warn);
                 /* 生成新INI结束 ************************/
-                /* StartForm中添加新服务按钮 *************/
+                // sections缓存数据新增
+                MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+                monitorSection.title = title;
+                monitorSection.url = url;
+                monitorSection.warn = warn;
+                MonitorSections.updateMonitor(section, monitorSection);
+                /* StartForm中更新服务按钮 *************/
                 mainForm.updateButton(section);
-                /* 添加新服务按钮完成****** *************/
+                /* 更新服务按钮完成****** *************/
                 // 关闭新增窗口
                 UpdateForm_Cancel_Button_Click(sender, e);
             }

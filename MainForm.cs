@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ProjectMonitor.config;
 using ProjectMonitor.utils;
 using ServerInfo;
 using ServerInfo.config;
@@ -100,8 +101,12 @@ namespace ProjectMonitor
         {
 
             String buttonText = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
+            // 监控地址
+            String url = iniUtils.IniReadValue(Config.MonitorIniPath, section, "url");
             // 状态，是暂停还是启动状态
             String stat = iniUtils.IniReadValue(Config.MonitorIniPath, section, "stat");
+            // 预警
+            String warn = iniUtils.IniReadValue(Config.MonitorIniPath, section, "warn");
             Button button = new Button();
             button.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             button.Location = new System.Drawing.Point(3, 0);
@@ -110,12 +115,12 @@ namespace ProjectMonitor
             button.TabIndex = 0;
             if ("0".Equals(stat))
             {
-                // 当前任务是暂停
+                // 当前任务是暂停(背景色置灰)
                 setButtonBackColor(button, Color.LightGray);
             }
             else if ("1".Equals(stat))
             {
-                // 当前任务是启动
+                // 当前任务是启动（背景色置浅蓝）
                 setButtonBackColor(button, Color.AliceBlue);
             }
             Image image = Image.FromFile(@"resource\icons\computer.ico");
@@ -150,7 +155,14 @@ namespace ProjectMonitor
             rightMenu.Items.Add(updateItem);
             button.ContextMenuStrip = rightMenu;
             flowLayoutPanel.Controls.Add(button);
-                     
+            //
+            // 数据写进缓存
+            MonitorSections.MonitorSection monitorSection = new MonitorSections.MonitorSection();
+            monitorSection.title = buttonText;
+            monitorSection.url = url;
+            monitorSection.stat = stat;
+            monitorSection.warn = warn;
+            MonitorSections.updateMonitor(section, monitorSection);
         }
 
         /// <summary>
@@ -192,6 +204,10 @@ namespace ProjectMonitor
             // 按钮背景置白
             Button button = (Button)ControlUtils.GetControlInstance(flowLayoutPanel, section);
             setButtonBackColor(button, Color.AliceBlue);
+            // 缓存数据更新为监听
+            MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+            monitorSection.stat = "1";
+            MonitorSections.updateMonitor(section, monitorSection);
         }
         /**
          * 右键停止按钮点击事件
@@ -205,6 +221,10 @@ namespace ProjectMonitor
             // 按钮背景置灰
             Button button = (Button)ControlUtils.GetControlInstance(flowLayoutPanel, section);
             setButtonBackColor(button, Color.LightGray);
+            // 缓存数据更新为停止
+            MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+            monitorSection.stat = "0";
+            MonitorSections.updateMonitor(section, monitorSection);
         }
 
         /**
@@ -259,16 +279,16 @@ namespace ProjectMonitor
         /// <param name="e"></param>
         private void timer_total_Tick(object sender, EventArgs e)
         {
-            List<String> sectionList = iniUtils.ReadSections(Config.MonitorIniPath);
+            List<String> sectionList = MonitorSections.getAllSections();
             for (int i = 0; i < sectionList.Count; i++)
             {
 
                 String section = sectionList[i];
-                
-                String title = iniUtils.IniReadValue(Config.MonitorIniPath, section, "title");
-                String url = iniUtils.IniReadValue(Config.MonitorIniPath, section, "url");
-                String warn = iniUtils.IniReadValue(Config.MonitorIniPath, section, "warn");
-                String stat = iniUtils.IniReadValue(Config.MonitorIniPath, section, "stat");
+                MonitorSections.MonitorSection monitorSection = MonitorSections.getMonitorByKey(section);
+                String title = monitorSection.title;
+                String url = monitorSection.url;
+                String warn = monitorSection.warn;
+                String stat = monitorSection.stat;
                 // 根据section获取控件
                 object buttonObj = ControlUtils.GetControlInstance(flowLayoutPanel, section);
 

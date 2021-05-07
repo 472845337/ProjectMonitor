@@ -1,4 +1,5 @@
 ﻿using ProjectMonitor;
+using ProjectMonitor.config;
 using ServerInfo.config;
 using ServerInfo.utils;
 using System;
@@ -58,6 +59,13 @@ namespace ServerInfo
                 iniUtils.IniWriteValue(Config.MonitorIniPath, newSection, "warn", warn);
                 // 添加默认是监听
                 iniUtils.IniWriteValue(Config.MonitorIniPath, newSection, "stat", "1");
+                // sections缓存数据新增
+                MonitorSections.MonitorSection monitorSection = new MonitorSections.MonitorSection();
+                monitorSection.title = title;
+                monitorSection.url = url;
+                monitorSection.stat = "1";
+                monitorSection.warn = warn;
+                MonitorSections.updateMonitor(newSection, monitorSection);
                 /* 生成新INI结束 ************************/
                 /* StartForm中添加新服务按钮 *************/
                 mainForm.addButton(newSection);
