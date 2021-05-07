@@ -65,9 +65,14 @@ namespace ProjectMonitor
             Config.fromEmail = fromEmail;
             Config.username = username;
             Config.password = password;
-            // 日志文件路径
+            // 日志
             String logFileName = iniUtils.IniReadValue(Config.SystemIniPath, "log", "filename");
+            String logSwitch = iniUtils.IniReadValue(Config.SystemIniPath, "log", "switch");
             Config.logFileName = logFileName;
+            if(logSwitch != null && "on".Equals(logSwitch))
+            {
+                Config.logSwitch = true;
+            }
             // 主窗体赋值，以便其它地方调用
             Config.mainForm = this;
             // 动态创建按钮控件
@@ -106,14 +111,13 @@ namespace ProjectMonitor
             if ("0".Equals(stat))
             {
                 // 当前任务是暂停
-
-            }else if ("1".Equals(stat))
+                setButtonBackColor(button, Color.LightGray);
+            }
+            else if ("1".Equals(stat))
             {
                 // 当前任务是启动
-
+                setButtonBackColor(button, Color.AliceBlue);
             }
-            setButtonBackColor(button, Color.AliceBlue);
-
             Image image = Image.FromFile(@"resource\icons\computer.ico");
             button.BackgroundImageLayout = ImageLayout.None;
             button.BackgroundImage = image;
@@ -182,8 +186,12 @@ namespace ProjectMonitor
         private void BtnRightMonitorClick(Object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            String section = (String)menuItem.Tag;
             // 开始监听状态置为1
-            iniUtils.IniWriteValue(Config.MonitorIniPath, (String)menuItem.Tag, "stat", "1");
+            iniUtils.IniWriteValue(Config.MonitorIniPath, section, "stat", "1");
+            // 按钮背景置白
+            Button button = (Button)ControlUtils.GetControlInstance(flowLayoutPanel, section);
+            setButtonBackColor(button, Color.AliceBlue);
         }
         /**
          * 右键停止按钮点击事件
@@ -191,8 +199,12 @@ namespace ProjectMonitor
         private void BtnRightStopClick(Object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            String section = (String)menuItem.Tag;
             // 停止监听
-            iniUtils.IniWriteValue(Config.MonitorIniPath, (String)menuItem.Tag, "stat", "0");
+            iniUtils.IniWriteValue(Config.MonitorIniPath, section, "stat", "0");
+            // 按钮背景置灰
+            Button button = (Button)ControlUtils.GetControlInstance(flowLayoutPanel, section);
+            setButtonBackColor(button, Color.LightGray);
         }
 
         /**
@@ -324,7 +336,7 @@ namespace ProjectMonitor
             button.BackColor = color;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+       /* private void button1_Click(object sender, EventArgs e)
         {
             // 企业微信机器人地址
             WorkWxSendMessage workWxSendMessage = new WorkWxSendMessage();
@@ -335,6 +347,26 @@ namespace ProjectMonitor
             String robotSendContentJson = JsonConvert.SerializeObject(workWxSendMessage);
             String result = HttpUtils.postRequest("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=455329a4-9065-4b79-8ccd-d8bf61d58815", robotSendContentJson, HttpUtils.CONTENT_TYPE_APPLICATION_JSON);
             LogUtils.writeLog(result);
+        }*/
+       /// <summary>
+       /// 开关按钮改变事件
+       /// </summary>
+       /// <param name="sender"></param>
+       /// <param name="e"></param>
+        private void LogSwitch_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isChecked = LogSwitch_CheckBox.Checked;
+            Config.logSwitch = isChecked;
+            String logSwitchStr = "";
+            if (isChecked)
+            {
+                logSwitchStr = "on";
+            }
+            else
+            {
+                logSwitchStr = "off";
+            }
+            iniUtils.IniWriteValue(Config.SystemIniPath, "log", "switch", logSwitchStr);
         }
     }
 }

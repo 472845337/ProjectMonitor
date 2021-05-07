@@ -29,6 +29,7 @@ namespace ProjectMonitor
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.Monitor_Button = new System.Windows.Forms.Button();
             this.Stop_Button = new System.Windows.Forms.Button();
@@ -40,6 +41,7 @@ namespace ProjectMonitor
             this.label1 = new System.Windows.Forms.Label();
             this.Timeout_Input = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
+            this.LogSwitch_CheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.TimerInterval_Input)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Timeout_Input)).BeginInit();
             this.SuspendLayout();
@@ -100,6 +102,7 @@ namespace ProjectMonitor
             0,
             0});
             this.TimerInterval_Input.Name = "TimerInterval_Input";
+            this.TimerInterval_Input.ReadOnly = true;
             this.TimerInterval_Input.Size = new System.Drawing.Size(54, 23);
             this.TimerInterval_Input.TabIndex = 5;
             this.TimerInterval_Input.Value = new decimal(new int[] {
@@ -121,7 +124,7 @@ namespace ProjectMonitor
             // Timeout_Label
             // 
             this.Timeout_Label.AutoSize = true;
-            this.Timeout_Label.Location = new System.Drawing.Point(204, 388);
+            this.Timeout_Label.Location = new System.Drawing.Point(163, 388);
             this.Timeout_Label.Name = "Timeout_Label";
             this.Timeout_Label.Size = new System.Drawing.Size(56, 17);
             this.Timeout_Label.TabIndex = 7;
@@ -130,7 +133,7 @@ namespace ProjectMonitor
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(352, 389);
+            this.label1.Location = new System.Drawing.Point(310, 388);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(20, 17);
             this.label1.TabIndex = 8;
@@ -138,7 +141,7 @@ namespace ProjectMonitor
             // 
             // Timeout_Input
             // 
-            this.Timeout_Input.Location = new System.Drawing.Point(267, 389);
+            this.Timeout_Input.Location = new System.Drawing.Point(225, 386);
             this.Timeout_Input.Maximum = new decimal(new int[] {
             60,
             0,
@@ -150,6 +153,7 @@ namespace ProjectMonitor
             0,
             0});
             this.Timeout_Input.Name = "Timeout_Input";
+            this.Timeout_Input.ReadOnly = true;
             this.Timeout_Input.Size = new System.Drawing.Size(79, 23);
             this.Timeout_Input.TabIndex = 9;
             this.Timeout_Input.Value = new decimal(new int[] {
@@ -169,13 +173,26 @@ namespace ProjectMonitor
             this.button1.Text = "测试";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // LogSwitch_CheckBox
+            // 
+            this.LogSwitch_CheckBox.AutoSize = true;
+            this.LogSwitch_CheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.LogSwitch_CheckBox.Location = new System.Drawing.Point(336, 387);
+            this.LogSwitch_CheckBox.Name = "LogSwitch_CheckBox";
+            this.LogSwitch_CheckBox.Size = new System.Drawing.Size(75, 21);
+            this.LogSwitch_CheckBox.TabIndex = 12;
+            this.LogSwitch_CheckBox.Text = "日志开关";
+            this.LogSwitch_CheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LogSwitch_CheckBox.UseVisualStyleBackColor = true;
+            this.LogSwitch_CheckBox.CheckedChanged += new System.EventHandler(this.LogSwitch_CheckBox_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(659, 430);
+            this.Controls.Add(this.LogSwitch_CheckBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Timeout_Input);
             this.Controls.Add(this.label1);
@@ -188,6 +205,7 @@ namespace ProjectMonitor
             this.Controls.Add(this.Monitor_Button);
             this.Controls.Add(this.flowLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -213,6 +231,7 @@ namespace ProjectMonitor
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown Timeout_Input;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox LogSwitch_CheckBox;
     }
 }
 

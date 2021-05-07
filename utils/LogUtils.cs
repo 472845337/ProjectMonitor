@@ -15,6 +15,10 @@ namespace ProjectMonitor.utils
         }
         public static void writeLog(String log, String logFile)
         {
+            if (!Config.logSwitch)
+            {
+                return;
+            }
             FileStream fs = null;
             StreamWriter sw = null;
             try
